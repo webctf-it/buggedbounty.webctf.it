@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+	<title>BuggedBounty</title>
+	
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css" integrity="sha384-5kGFOAqgEKnuF6c2jk2JANKHZgYVt38Wn2dVJENtq1EBCP54/1uzXU5mpxqL8WjN" crossorigin="anonymous">
+	
+    <link rel="stylesheet" href="style.css">
+  </head>
+  
+  <body>
+    <div
+	  class="hero is-primary is-bold has-text-centered"
+	  style="height: 95vh; display: table; width: 100%;"
+	>
+    <div class="section">
+      <h2 class="title has-text-centered is-1">
+        Welcome to bug bounty creator!
+      </h2>
+      <br>
+	  
+      <p class="subtitle has-text-centered is-3">
+        Want to try out the service? Create your trial bug bounty right now!
+      </p>
+      <br>
+
+      <form action="/createBB" method="POST">
+        <div class="field is-horizontal is-inline-block">
+          <label class="label has-text-white">Bug Bounty's name &amp; password</label>
+          <div class="field-body">
+            <div class="field">
+              <input class="input" type="text" placeholder="e.g. WebCtf Login bug" name="name" id="inputName">
+            </div>
+
+            <div class="field">
+              <input class="input" type="password" placeholder="Bug Bounty's password" name="password" id="inputPassword">
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-body">
+                <div class="field">
+                  <div class="control is-inline-block">
+                    <button class="button is-info is-rounded" id="btnForm" type="submit">
+                      Register
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+	  
+      <br>
+      <br>
+      <h5 class="title is-5">Remember! Choose a strong password!</h5>
+      <br>
+      <br>
+	  
+      <h3 class="title is-3">You have already created a bug bounty? Login!</h3>
+      <form action="/login" method="POST">
+        <div class="field is-horizontal is-inline-block">
+          <label class="label has-text-white">Bug Bounty's name &amp; password</label>
+          <div class="field-body">
+            <div class="field">
+              <input class="input" type="text" placeholder="Bug Bounty's name" name="name" id="inputName">
+            </div>
+
+            <div class="field">
+              <input class="input" type="password" placeholder="Bug Bounty's password" name="password" id="inputPassword">
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-body">
+                <div class="field">
+                  <div class="control is-inline-block">
+                    <button class="button is-info is-rounded" id="btnForm" type="submit">
+                      Login
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="hero is-warning has-text-black has-text-weight-medium" style="min-height: 5vh;">
+    <div class="content has-text-centered" style="margin: auto;">
+      <p>
+        Graphic made with ❤️ by <a href="https://webctf.it/users/eusebiu">@Eusebiu</a>
+      </p>
+    </div>
+  </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        (document.querySelectorAll(".notification .delete") || []).forEach(
+          $delete => {
+            $notification = $delete.parentNode;
+
+            $delete.addEventListener("click", () => {
+              $notification.classList.add("is-hidden");
+            });
+          }
+        );
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+body {
+  display: table !important;
+  width: 100%;
+}
+
+.section {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.label {
+  margin-top: -1vh !important;
+}

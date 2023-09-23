@@ -1,0 +1,49 @@
+version: "3.5"
+services:
+    node:
+      build: ./node
+      restart: always
+      read_only: true
+      depends_on:
+          - postgres
+      # PAY ATTENTION: SOCK FOLDER NEEDS TO HAVE SETGID AND TO BE CHOWNED TO WWW-DATA GROUP. OTHER SETTINGS ARE NOT SECURE!
+      volumes:
+          - ./sock/:/sock/:rw
+      networks:
+          - default
+          - nginx_nolog
+      logging:
+          driver: "json-file"
+          options:
+              max-file: "1"
+              max-size: "15m"
+      #healthcheck:
+      #    test: "curl --fail -s --resolve 'buggedbounty.webctf.it:80:172.17.0.1' --resolve 'buggedbounty.webctf.it:443:172.17.0.1' https://buggedbounty.webctf.it"
+      #    timeout: 15s
+      #    interval: 2m30s
+      #    retries: 2
+      tty: true
+    postgres:
+      build: ./postgres
+      restart: always
+      environment:
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=postgres
+          - POSTGRES_DB=webapp
+      logging:
+          driver: "json-file"
+          options:
+              max-file: "1"
+              max-size: "15m"
+      healthcheck:
+          test: "pg_isready -U $$POSTGRES_USER"
+          timeout: 15s
+          interval: 2m
+          retries: 2
+networks:
+    default:
+        driver_opts:
+            com.docker.network.bridge.name: buggedbounty
+        internal: true
+    nginx_nolog:
+        external: true

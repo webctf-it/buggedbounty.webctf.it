@@ -1,0 +1,66 @@
+# NGINX vhost for BuggedBounty Challenge (by @sparrrgh) NodeJS container
+
+# Redirect HTTP (port 80) to HTTPS (port 443)
+server {
+	# Ports
+	listen 80;
+	listen [::]:80;
+	
+	# Server name
+	server_name buggedbounty.webctf.it;
+
+	# Logs
+	error_log /var/log/nginx/error_buggedbounty_webctf.log warn;
+	access_log /var/log/nginx/access_buggedbounty_webctf.log combined if=$is_not_docker_whitelist;
+
+	# Bad Bot Blocker + DDOS
+	include /etc/nginx/bots.d/blockbots.conf;
+	include /etc/nginx/bots.d/ddos.conf;
+	
+	# Redirect
+	return 301 https://$server_name$request_uri;
+}
+
+# HTTPS server block
+server {
+	# Ports
+	listen 443 ssl http2;
+	listen [::]:443 ssl http2;
+
+	# Server name
+	server_name buggedbounty.webctf.it;
+
+	# Root for static contents
+	root /var/docker/buggedbounty.webctf.it/node/src/static;
+
+	# Logs
+	error_log /var/log/nginx/error_buggedbounty_webctf.log warn;
+	access_log /var/log/nginx/access_buggedbounty_webctf.log combined if=$is_not_docker_whitelist;
+
+	# Bad Bot Blocker + DDOS
+	include /etc/nginx/bots.d/blockbots.conf;
+	include /etc/nginx/bots.d/ddos.conf;
+
+	# TLS/SSL certificates
+	include ssl_params;
+
+	# Security headers
+	include security_header_params;
+
+	# Security.txt implementation
+	include security_txt_params;
+
+	# Custom error pages
+	proxy_intercept_errors on;
+	error_page 404 /404.html;      # /404.html is the default 404 error page
+	location /404.html {internal;} # Direct access to 404 page generates a 404 error
+
+	# Main location
+	location / {
+		proxy_pass http://unix:/var/docker/buggedbounty.webctf.it/sock/app.sock;
+		include proxy_params;
+	}
+
+	# Deny access to hidden files
+	location ~ /\.(?!well-known).* {deny all;}
+}
